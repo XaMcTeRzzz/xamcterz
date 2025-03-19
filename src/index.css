@@ -1,0 +1,200 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --radius: 0.5rem;
+
+    --neon-green: 108 100% 54%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-background/80 backdrop-blur-md border border-neon-green/20 shadow-lg;
+  }
+  
+  .neon-button {
+    @apply bg-neon-green text-black font-semibold rounded-full shadow-[0_0_15px_rgba(57,255,20,0.7)] transition-all duration-300 hover:shadow-[0_0_25px_rgba(57,255,20,0.9)];
+  }
+
+  .neon-border {
+    @apply border border-neon-green shadow-[0_0_5px_rgba(57,255,20,0.7)];
+  }
+  
+  .task-card {
+    @apply transition-all duration-300 border-neon-green/20 hover:border-neon-green/50;
+  }
+  
+  .form-overlay {
+    @apply fixed inset-0 bg-background/95 backdrop-blur-lg z-[100] flex items-center justify-center p-4;
+  }
+  
+  .form-container {
+    @apply w-full max-w-md glass-card p-6 rounded-xl border border-neon-green/30 shadow-[0_0_35px_rgba(57,255,20,0.4)];
+  }
+  
+  .voice-recording {
+    @apply border-neon-green/100 shadow-[0_0_15px_rgba(57,255,20,0.7)] animate-pulse-neon;
+  }
+}
+
+@layer utilities {
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  .animate-pulse-neon {
+    animation: pulse-neon 2s ease-in-out infinite;
+  }
+
+  .animate-pulse-fast {
+    animation: pulse-fast 0.5s infinite alternate;
+  }
+  
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite;
+  }
+  
+  .animate-slide-up {
+    animation: slide-up 0.3s ease-out forwards;
+  }
+  
+  .animate-fade-in {
+    animation: fade-in 0.3s ease-out forwards;
+  }
+  
+  .animate-scale-in {
+    animation: scale-in 0.3s ease-out forwards;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse-neon {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes pulse-fast {
+  0% {
+    opacity: 0.5;
+    transform: scaleY(0.7);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 2px rgba(57, 255, 20, 0.8));
+  }
+  50% {
+    filter: drop-shadow(0 0 8px rgba(57, 255, 20, 0.8));
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scale-in {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Toast стилі */
+[data-sonner-toaster][data-theme="system"] {
+  --scale: 0.9;
+  --transition-duration: 200ms;
+  font-size: 0.875rem;
+}
+
+[data-sonner-toaster] [data-sonner-toast] {
+  --y: -0.5rem;
+  --lift-amount: 0.35rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+[data-sonner-toaster] [data-sonner-toast][data-mounted] {
+  transform: translate3d(0, var(--lift-amount), 0) scale(var(--scale));
+}
+
+[data-sonner-toaster] [data-sonner-toast][data-visible] {
+  transform: translate3d(0, 0, 0) scale(var(--scale));
+  opacity: 1;
+}
