@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { BottomNavigation } from "@/components/BottomNavigation";
 import { TaskCalendar } from "@/components/TaskCalendar";
 import { TasksList, Task } from "@/components/TasksList";
@@ -46,6 +47,7 @@ const generateSampleTasks = (): Task[] => {
 };
 
 const Index = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("calendar");
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -236,17 +238,16 @@ const Index = () => {
   };
   
   const handleTabChange = (tab: string) => {
-    setActiveTab(tab);
-    if (tab === "tasks") {
-      toast({
-        title: "Мої задачі",
-        description: "Всі ваші заплановані задачі",
-      });
-    } else if (tab === "settings") {
-      toast({
-        title: "Налаштування",
-        description: "Налаштуйте додаток під себе",
-      });
+    if (tab === "settings") {
+      navigate("/settings");
+    } else {
+      setActiveTab(tab);
+      if (tab === "tasks") {
+        toast({
+          title: "Мої задачі",
+          description: "Всі ваші заплановані задачі",
+        });
+      }
     }
   };
   

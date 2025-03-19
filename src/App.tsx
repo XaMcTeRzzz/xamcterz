@@ -10,7 +10,6 @@ import { Calendar } from "./components/Calendar";
 import { TasksList, Task } from "./components/TasksList";
 import { AddTaskDialog } from "./components/AddTaskDialog";
 import { Settings } from "./components/Settings";
-import { JarvisAssistant } from "./components/JarvisAssistant";
 import { Button } from "./components/ui/button";
 import { Plus } from "lucide-react";
 
@@ -24,6 +23,7 @@ const App = () => (
       <BrowserRouter basename="/">
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/settings" element={<Settings />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

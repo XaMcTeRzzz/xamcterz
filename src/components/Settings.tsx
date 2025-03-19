@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
@@ -7,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormDescription } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { toast } from "@/hooks/use-toast";
-import { BotIcon, CheckIcon, SaveIcon, CalendarIcon, MailIcon, BellIcon, Moon, Sun, BellRing, Languages, Trash2, Mic, Clock, Send, AlertCircle, UploadCloud, FileKey } from "lucide-react";
+import { BotIcon, CheckIcon, SaveIcon, CalendarIcon, MailIcon, BellIcon, Moon, Sun, BellRing, Languages, Trash2, Mic, Clock, Send, AlertCircle, UploadCloud, FileKey, ArrowLeft } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -69,6 +70,7 @@ const DEFAULT_SIRI_SETTINGS: SiriSettings = {
 };
 
 export function Settings() {
+  const navigate = useNavigate();
   const [isSaving, setIsSaving] = useState(false);
   const [theme, setTheme] = useState<"dark" | "light" | "system">("dark");
   const [notifications, setNotifications] = useState(true);
@@ -703,272 +705,286 @@ export function Settings() {
   };
 
   return (
-    <div className="space-y-6 animate-slide-up">
-      <h2 className="text-xl font-semibold text-primary">Налаштування</h2>
+    <div className="container mx-auto p-4 space-y-8">
+      <div className="flex items-center gap-4">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => navigate("/")}
+          className="w-10 h-10"
+        >
+          <ArrowLeft className="h-6 w-6" />
+        </Button>
+        <h1 className="text-2xl font-bold">Налаштування</h1>
+      </div>
       
-      {renderSiriSettings()}
-      
-      <Card className="glass-card">
-        <CardHeader>
-          <CardTitle>Зовнішній вигляд</CardTitle>
-          <CardDescription>Змініть тему додатку</CardDescription>
-        </CardHeader>
-        <CardContent className="grid gap-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              {theme === "dark" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
-              <span>Тема</span>
+      <div className="space-y-6 animate-slide-up">
+        <h2 className="text-xl font-semibold text-primary">Налаштування</h2>
+        
+        {renderSiriSettings()}
+        
+        <Card className="glass-card">
+          <CardHeader>
+            <CardTitle>Зовнішній вигляд</CardTitle>
+            <CardDescription>Змініть тему додатку</CardDescription>
+          </CardHeader>
+          <CardContent className="grid gap-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                {theme === "dark" ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+                <span>Тема</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button 
+                  variant={theme === "light" ? "default" : "outline"} 
+                  size="sm"
+                  onClick={() => handleThemeChange("light")}
+                  className="h-8 w-8 p-0 rounded-full"
+                >
+                  <Sun className="h-4 w-4" />
+                  <span className="sr-only">Світла</span>
+                </Button>
+                <Button 
+                  variant={theme === "dark" ? "default" : "outline"} 
+                  size="sm"
+                  onClick={() => handleThemeChange("dark")}
+                  className="h-8 w-8 p-0 rounded-full"
+                >
+                  <Moon className="h-4 w-4" />
+                  <span className="sr-only">Темна</span>
+                </Button>
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <Button 
-                variant={theme === "light" ? "default" : "outline"} 
-                size="sm"
-                onClick={() => handleThemeChange("light")}
-                className="h-8 w-8 p-0 rounded-full"
+          </CardContent>
+        </Card>
+        
+        <Card className="glass-card">
+          <CardHeader>
+            <CardTitle>Сповіщення</CardTitle>
+            <CardDescription>Налаштування сповіщень</CardDescription>
+          </CardHeader>
+          <CardContent className="grid gap-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <BellRing className="h-5 w-5" />
+                <Label htmlFor="notifications">Сповіщення про задачі</Label>
+              </div>
+              <Switch 
+                id="notifications" 
+                checked={notifications} 
+                onCheckedChange={setNotifications} 
+              />
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card className="glass-card">
+          <CardHeader>
+            <CardTitle>Мова</CardTitle>
+            <CardDescription>Оберіть мову інтерфейсу</CardDescription>
+          </CardHeader>
+          <CardContent className="grid gap-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Languages className="h-5 w-5" />
+                <span>Мова</span>
+              </div>
+              <select 
+                value={language}
+                onChange={(e) => setLanguage(e.target.value)}
+                className="bg-background border border-input rounded-md px-3 py-1"
               >
-                <Sun className="h-4 w-4" />
-                <span className="sr-only">Світла</span>
-              </Button>
-              <Button 
-                variant={theme === "dark" ? "default" : "outline"} 
-                size="sm"
-                onClick={() => handleThemeChange("dark")}
-                className="h-8 w-8 p-0 rounded-full"
-              >
-                <Moon className="h-4 w-4" />
-                <span className="sr-only">Темна</span>
-              </Button>
+                <option value="uk">Українська</option>
+                <option value="en">English</option>
+              </select>
             </div>
-          </div>
-        </CardContent>
-      </Card>
-      
-      <Card className="glass-card">
-        <CardHeader>
-          <CardTitle>Сповіщення</CardTitle>
-          <CardDescription>Налаштування сповіщень</CardDescription>
-        </CardHeader>
-        <CardContent className="grid gap-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <BellRing className="h-5 w-5" />
-              <Label htmlFor="notifications">Сповіщення про задачі</Label>
-            </div>
-            <Switch 
-              id="notifications" 
-              checked={notifications} 
-              onCheckedChange={setNotifications} 
-            />
-          </div>
-        </CardContent>
-      </Card>
-      
-      <Card className="glass-card">
-        <CardHeader>
-          <CardTitle>Мова</CardTitle>
-          <CardDescription>Оберіть мову інтерфейсу</CardDescription>
-        </CardHeader>
-        <CardContent className="grid gap-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Languages className="h-5 w-5" />
-              <span>Мова</span>
-            </div>
-            <select 
-              value={language}
-              onChange={(e) => setLanguage(e.target.value)}
-              className="bg-background border border-input rounded-md px-3 py-1"
+          </CardContent>
+        </Card>
+        
+        <Card className="glass-card border-destructive/50">
+          <CardHeader>
+            <CardTitle className="text-destructive">Дані</CardTitle>
+            <CardDescription>Керування даними додатку</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button 
+              variant="destructive" 
+              size="sm"
+              onClick={handleClearData}
+              className="w-full flex items-center gap-2"
             >
-              <option value="uk">Українська</option>
-              <option value="en">English</option>
-            </select>
-          </div>
-        </CardContent>
-      </Card>
-      
-      <Card className="glass-card border-destructive/50">
-        <CardHeader>
-          <CardTitle className="text-destructive">Дані</CardTitle>
-          <CardDescription>Керування даними додатку</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Button 
-            variant="destructive" 
-            size="sm"
-            onClick={handleClearData}
-            className="w-full flex items-center gap-2"
-          >
-            <Trash2 className="h-4 w-4" />
-            <span>Видалити всі задачі</span>
-          </Button>
-        </CardContent>
-      </Card>
+              <Trash2 className="h-4 w-4" />
+              <span>Видалити всі задачі</span>
+            </Button>
+          </CardContent>
+        </Card>
 
-      {/* Telegram Bot Settings */}
-      <Card className="glass-card">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <BotIcon className="h-5 w-5" />
-            Telegram Bot
-          </CardTitle>
-          <CardDescription>Налаштування бота для відправки звітів</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
-              <Label>Увімкнути Telegram бота</Label>
-              <p className="text-xs text-muted-foreground">Отримуйте звіти про задачі через Telegram</p>
+        {/* Telegram Bot Settings */}
+        <Card className="glass-card">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <BotIcon className="h-5 w-5" />
+              Telegram Bot
+            </CardTitle>
+            <CardDescription>Налаштування бота для відправки звітів</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <Label>Увімкнути Telegram бота</Label>
+                <p className="text-xs text-muted-foreground">Отримуйте звіти про задачі через Telegram</p>
+              </div>
+              <Switch 
+                checked={telegramSettings.enabled} 
+                onCheckedChange={(checked) => handleTelegramSettingChange('enabled', checked)}
+              />
             </div>
-            <Switch 
-              checked={telegramSettings.enabled} 
-              onCheckedChange={(checked) => handleTelegramSettingChange('enabled', checked)}
-            />
-          </div>
 
-          {telegramSettings.enabled && (
-            <>
-              <Separator className="my-2" />
-              
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="bot-token">Токен бота</Label>
-                  <div className="flex gap-2">
-                    <Input
-                      id="bot-token"
-                      type="password"
-                      value={telegramSettings.botToken}
-                      onChange={(e) => handleTelegramSettingChange('botToken', e.target.value)}
-                      placeholder="123456789:ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                      className="flex-1"
-                    />
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      onClick={handleValidateToken}
-                      disabled={isValidatingToken || !telegramSettings.botToken}
-                    >
-                      {isValidatingToken ? "Перевірка..." : "Перевірити"}
-                    </Button>
-                  </div>
-                  {isTokenValid !== null && (
-                    <p className={`text-xs ${isTokenValid ? "text-green-500" : "text-red-500"}`}>
-                      {isTokenValid ? "✓ Токен валідний" : "✗ Токен невалідний"}
-                    </p>
-                  )}
-                  <p className="text-xs text-muted-foreground">
-                    Створіть бота через @BotFather в Telegram і отримайте токен
-                  </p>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="chat-id">ID чату</Label>
-                  <Input
-                    id="chat-id"
-                    value={telegramSettings.chatId}
-                    onChange={(e) => handleTelegramSettingChange('chatId', e.target.value)}
-                    placeholder="123456789"
-                  />
-                  <p className="text-xs text-muted-foreground">
-                    Ваш особистий ID в Telegram або ID групового чату
-                  </p>
-                </div>
-
+            {telegramSettings.enabled && (
+              <>
                 <Separator className="my-2" />
-
-                <div className="space-y-2">
-                  <Label>Розклад звітів</Label>
-                  
-                  <div className="space-y-4 pt-2">
-                    <div className="flex items-center justify-between">
-                      <div className="space-y-0.5">
-                        <span className="text-sm font-medium">Щоденний звіт</span>
-                        <p className="text-xs text-muted-foreground">Отримуйте звіт про задачі щодня</p>
-                      </div>
-                      <Switch 
-                        checked={telegramSettings.reportSchedule.daily} 
-                        onCheckedChange={(checked) => handleScheduleSettingChange('daily', checked)}
+                
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="bot-token">Токен бота</Label>
+                    <div className="flex gap-2">
+                      <Input
+                        id="bot-token"
+                        type="password"
+                        value={telegramSettings.botToken}
+                        onChange={(e) => handleTelegramSettingChange('botToken', e.target.value)}
+                        placeholder="123456789:ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                        className="flex-1"
                       />
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={handleValidateToken}
+                        disabled={isValidatingToken || !telegramSettings.botToken}
+                      >
+                        {isValidatingToken ? "Перевірка..." : "Перевірити"}
+                      </Button>
                     </div>
+                    {isTokenValid !== null && (
+                      <p className={`text-xs ${isTokenValid ? "text-green-500" : "text-red-500"}`}>
+                        {isTokenValid ? "✓ Токен валідний" : "✗ Токен невалідний"}
+                      </p>
+                    )}
+                    <p className="text-xs text-muted-foreground">
+                      Створіть бота через @BotFather в Telegram і отримайте токен
+                    </p>
+                  </div>
 
-                    {telegramSettings.reportSchedule.daily && (
-                      <div className="ml-6 space-y-2">
-                        <Label htmlFor="daily-time">Час відправки</Label>
-                        <Input
-                          id="daily-time"
-                          type="time"
-                          value={telegramSettings.reportSchedule.dailyTime}
-                          onChange={(e) => handleScheduleSettingChange('dailyTime', e.target.value)}
+                  <div className="space-y-2">
+                    <Label htmlFor="chat-id">ID чату</Label>
+                    <Input
+                      id="chat-id"
+                      value={telegramSettings.chatId}
+                      onChange={(e) => handleTelegramSettingChange('chatId', e.target.value)}
+                      placeholder="123456789"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Ваш особистий ID в Telegram або ID групового чату
+                    </p>
+                  </div>
+
+                  <Separator className="my-2" />
+
+                  <div className="space-y-2">
+                    <Label>Розклад звітів</Label>
+                    
+                    <div className="space-y-4 pt-2">
+                      <div className="flex items-center justify-between">
+                        <div className="space-y-0.5">
+                          <span className="text-sm font-medium">Щоденний звіт</span>
+                          <p className="text-xs text-muted-foreground">Отримуйте звіт про задачі щодня</p>
+                        </div>
+                        <Switch 
+                          checked={telegramSettings.reportSchedule.daily} 
+                          onCheckedChange={(checked) => handleScheduleSettingChange('daily', checked)}
                         />
                       </div>
-                    )}
 
-                    <div className="flex items-center justify-between">
-                      <div className="space-y-0.5">
-                        <span className="text-sm font-medium">Щотижневий звіт</span>
-                        <p className="text-xs text-muted-foreground">Отримуйте підсумковий звіт за тиждень</p>
-                      </div>
-                      <Switch 
-                        checked={telegramSettings.reportSchedule.weekly} 
-                        onCheckedChange={(checked) => handleScheduleSettingChange('weekly', checked)}
-                      />
-                    </div>
-
-                    {telegramSettings.reportSchedule.weekly && (
-                      <div className="ml-6 space-y-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="weekly-day">День тижня</Label>
-                          <Select 
-                            value={telegramSettings.reportSchedule.weeklyDay.toString()} 
-                            onValueChange={(value) => handleScheduleSettingChange('weeklyDay', parseInt(value))}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Оберіть день" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="0">Неділя</SelectItem>
-                              <SelectItem value="1">Понеділок</SelectItem>
-                              <SelectItem value="2">Вівторок</SelectItem>
-                              <SelectItem value="3">Середа</SelectItem>
-                              <SelectItem value="4">Четвер</SelectItem>
-                              <SelectItem value="5">П'ятниця</SelectItem>
-                              <SelectItem value="6">Субота</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="weekly-time">Час відправки</Label>
+                      {telegramSettings.reportSchedule.daily && (
+                        <div className="ml-6 space-y-2">
+                          <Label htmlFor="daily-time">Час відправки</Label>
                           <Input
-                            id="weekly-time"
+                            id="daily-time"
                             type="time"
-                            value={telegramSettings.reportSchedule.weeklyTime}
-                            onChange={(e) => handleScheduleSettingChange('weeklyTime', e.target.value)}
+                            value={telegramSettings.reportSchedule.dailyTime}
+                            onChange={(e) => handleScheduleSettingChange('dailyTime', e.target.value)}
                           />
                         </div>
+                      )}
+
+                      <div className="flex items-center justify-between">
+                        <div className="space-y-0.5">
+                          <span className="text-sm font-medium">Щотижневий звіт</span>
+                          <p className="text-xs text-muted-foreground">Отримуйте підсумковий звіт за тиждень</p>
+                        </div>
+                        <Switch 
+                          checked={telegramSettings.reportSchedule.weekly} 
+                          onCheckedChange={(checked) => handleScheduleSettingChange('weekly', checked)}
+                        />
                       </div>
-                    )}
+
+                      {telegramSettings.reportSchedule.weekly && (
+                        <div className="ml-6 space-y-4">
+                          <div className="space-y-2">
+                            <Label htmlFor="weekly-day">День тижня</Label>
+                            <Select 
+                              value={telegramSettings.reportSchedule.weeklyDay.toString()} 
+                              onValueChange={(value) => handleScheduleSettingChange('weeklyDay', parseInt(value))}
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder="Оберіть день" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="0">Неділя</SelectItem>
+                                <SelectItem value="1">Понеділок</SelectItem>
+                                <SelectItem value="2">Вівторок</SelectItem>
+                                <SelectItem value="3">Середа</SelectItem>
+                                <SelectItem value="4">Четвер</SelectItem>
+                                <SelectItem value="5">П'ятниця</SelectItem>
+                                <SelectItem value="6">Субота</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+
+                          <div className="space-y-2">
+                            <Label htmlFor="weekly-time">Час відправки</Label>
+                            <Input
+                              id="weekly-time"
+                              type="time"
+                              value={telegramSettings.reportSchedule.weeklyTime}
+                              onChange={(e) => handleScheduleSettingChange('weeklyTime', e.target.value)}
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="pt-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handleSendTestReport}
+                      disabled={isTesting || !telegramSettings.botToken || !telegramSettings.chatId}
+                      className="w-full flex items-center justify-center gap-2"
+                    >
+                      <Send className="h-4 w-4" />
+                      {isTesting ? "Відправка..." : "Відправити тестовий звіт"}
+                    </Button>
                   </div>
                 </div>
-
-                <div className="pt-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleSendTestReport}
-                    disabled={isTesting || !telegramSettings.botToken || !telegramSettings.chatId}
-                    className="w-full flex items-center justify-center gap-2"
-                  >
-                    <Send className="h-4 w-4" />
-                    {isTesting ? "Відправка..." : "Відправити тестовий звіт"}
-                  </Button>
-                </div>
-              </div>
-            </>
-          )}
-        </CardContent>
-      </Card>
-      
-      <div className="h-10"></div>
+              </>
+            )}
+          </CardContent>
+        </Card>
+        
+        <div className="h-10"></div>
+      </div>
     </div>
   );
 }
